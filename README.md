@@ -1,42 +1,12 @@
-# Toasty-Bots 
+# Zade Ayarlamalı Moderasyon
 
-# Stat Botu
-
-
-![image](https://user-images.githubusercontent.com/77938499/121361655-2c1a2b80-c93e-11eb-8536-dac1b8979317.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121361700-376d5700-c93e-11eb-97b4-8e2020c81e41.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121361741-3dfbce80-c93e-11eb-912d-3849c83851c4.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121361507-0725b880-c93e-11eb-97ac-237e932f75dd.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121361541-0e4cc680-c93e-11eb-9b96-bdd065287221.png)
-
-# Moderasyon Botu
-![image](https://user-images.githubusercontent.com/77938499/121362767-06415680-c93f-11eb-9991-f9b86a72b3cc.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121363814-f118f780-c93f-11eb-9a92-3bb96c94d0e9.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121363840-f5ddab80-c93f-11eb-8031-227230ddd39d.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121364026-17d72e00-c940-11eb-807b-121de281333e.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121389547-3267d200-c955-11eb-9364-e990f6918b4a.png)
-
-
-![image](https://user-images.githubusercontent.com/77938499/121362282-aa76cd80-c93e-11eb-9288-9ae9714b115c.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121362334-b4003580-c93e-11eb-97a0-d551aa730d98.png)
-
-
-# Guard Botu
-![image](https://user-images.githubusercontent.com/77938499/121354397-8368cd80-c937-11eb-987a-a601b260d023.png)
-
-![image](https://user-images.githubusercontent.com/77938499/121354429-8b287200-c937-11eb-88df-521b8d744326.png)
-
-# Invite Botu
-![image](https://user-images.githubusercontent.com/77938499/121364573-93d17600-c940-11eb-816b-86c7feba5f21.png)
-
-
-![image](https://user-images.githubusercontent.com/77938499/121364494-80bea600-c940-11eb-92db-3dd88a69affa.png)
+![image](https://user-images.githubusercontent.com/77938499/162772087-b887b9b6-237f-46fc-9f2b-5f2ea21dec69.png)
+![image](https://user-images.githubusercontent.com/77938499/162772167-b61edd1d-5fa0-45b7-9dfd-0065b32398df.png)
+![image](https://user-images.githubusercontent.com/77938499/162772210-efbdce90-ad82-4758-9c85-1529d6313971.png)
+![image](https://user-images.githubusercontent.com/77938499/162772250-472152f1-ae08-404b-8b35-39c16ef7b4fe.png)
+![image](https://user-images.githubusercontent.com/77938499/162772292-44debb69-bcad-425a-b7f8-3a5768e6c4c0.png)
+![image](https://user-images.githubusercontent.com/77938499/162772514-f6c74a9a-15f0-41a7-8ea8-e9d08a4f660c.png)
+![image](https://user-images.githubusercontent.com/77938499/162772641-248f6806-435f-4ef3-a8c4-f83d8f34e5d8.png)
+![image](https://user-images.githubusercontent.com/77938499/162772336-cbb3a2ad-66b6-44fb-91c3-638f49b17eb0.png)
+![image](https://user-images.githubusercontent.com/77938499/162772361-2b79f96a-7f87-4770-8c60-4b0c84e51496.png)
+![image](https://user-images.githubusercontent.com/77938499/162772396-5772f8a8-ab84-4464-af14-bb316dcbcca9.png)
