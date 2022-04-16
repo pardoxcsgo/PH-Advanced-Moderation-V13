@@ -1,6 +1,6 @@
 # Zade Ayarlamalı Moderasyon
 
-Daha önce paylaşmış olduğum moderasyon botunda ufak tefek hatalar vardı ve bir sürü ID girmek can sıkıcı olduğu için moderasyon botunu daha gelişmiş, hatalarından arınmış ve ayarlamalı hale getirmiş bulunmaktayım. Bot şuan v12 eğer talep gelirse v13e çevirip geri paylaşırım.
+Botu sıfırdan kodlamadım önceki v12 olarak paylaştığım bot hatalarla doluydu ve çok fazla ID girmek amelelik olduğu için canımı sıkıyordu. Botu v13 geçirip ayarlamalı bir hale soktum eskisinden kat kat daha iyi hale geldiğini düşünüyorum. Dediğim gibi v12 botu v13 geçirdiğim için görmediğim hatalar illaki olacaktır. Hataları bana discord hesabım üzerinden bildirirseniz daha hızlı bir şekilde hataları çözüp projeyi güncelleyebilirim.
 
 ![image](https://user-images.githubusercontent.com/77938499/162772087-b887b9b6-237f-46fc-9f2b-5f2ea21dec69.png)
 ![image](https://user-images.githubusercontent.com/77938499/162772167-b61edd1d-5fa0-45b7-9dfd-0065b32398df.png)
