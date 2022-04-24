@@ -194,6 +194,9 @@ module.exports = class {
 
   const client = this.client
 
+  let embed = new Discord.MessageEmbed()
+  embed.setColor("RANDOM")
+
   const cmd = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command));
   //if(message.channel.id == server.GeneralChat && !message.member.permissions.has('VIEW_AUDIT_LOG')) return// message.react(this.client.emojis.cache.find(x => x.name === this.client.config.emojis.no_name))
 
@@ -206,17 +209,10 @@ module.exports = class {
     if (res.allowedRoles.some(x => message.member.roles.cache.has(x)) == false && !res.allowedUsers.includes(message.author.id) && !this.client.config.botOwners.includes(message.author.id) && !message.member.permissions.has("MANAGE_ROLES")) return
     if (res.blockedUsers.includes(message.author.id)) return
 
-    let embed = new Discord.MessageEmbed()
-    embed.setColor("RANDOM")
-    //embed.setAuthor({ name: message.author.tag, iconURL: message.author.displayAvatarURL({ dynamic: true })})
-    
-
     let member = message.mentions.members.first() || await this.client.üye(args[0], message.guild)
     if (!member) {
-      embed.setDescription("Bir üye etiketle ve tekrardan dene!")
-      return message.channel.send({
-        embeds: embed
-      })
+      this.client.yolla("Bir üye etiketle ve tekrardan dene!", message.author, message.channel)
+
     }
 
     let role = message.guild.roles.cache.get(res.role)
@@ -224,28 +220,19 @@ module.exports = class {
 
     if (!member.roles.cache.has(role.id)) {
       await member.roles.add(role.id)
-      await embed.setDescription(`<@${member.user.id}> üyesine <@&${role.id}> rolü verildi.`)
-      await message.channel.send({
-        embeds: embed
-      }).then(m => m.delete({
-        timeout: 5000
-      }))
-      await embed.setDescription(`<@${member.user.id}> üyesine <@&${role.id}> rolü <@${message.author.id}> tarafından verildi.`)
-      this.client.channels.cache.get(server.BotRoleManageLog).send({
-        embeds: embed
-      })
+      await this.client.yolla(`<@${member.user.id}> üyesine <@&${role.id}> rolü verildi.`, message.author, message.channel)
+
+    const verildi = embed.setDescription(`<@${member.user.id}> üyesine <@&${role.id}> rolü <@${message.author.id}> tarafından verildi.`, message.author, message.channel)
+
+     await this.client.channels.cache.get(server.BotRoleManageLog).send({embeds: [verildi]})
+
     } else {
       await member.roles.remove(role.id)
-      await embed.setDescription(`<@${member.user.id}> üyesinin <@&${role.id}> rolü alındı.`)
-      await message.channel.send({
-        embeds: embed
-      }).then(m => m.delete({
-        timeout: 5000
-      }))
-      await embed.setDescription(`<@${member.user.id}> üyesinin <@&${role.id}> rolü <@${message.author.id}> tarafından alındı.`)
-      this.client.channels.cache.get(server.BotRoleManageLog).send({
-        embeds: embed
-      })
+      await this.client.yolla(`<@${member.user.id}> üyesinin <@&${role.id}> rolü alındı.`, message.author, message.channel)
+
+     const alındı = embed.setDescription(`<@${member.user.id}> üyesinin <@&${role.id}> rolü <@${message.author.id}> tarafından alındı.`, message.author, message.channel)
+
+      await this.client.channels.cache.get(server.BotRoleManageLog).send({embeds: [alındı]})
     }
     return
   }
