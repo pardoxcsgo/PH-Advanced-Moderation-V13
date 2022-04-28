@@ -67,26 +67,38 @@ class Cezalar extends Command {
             let outi = table(datax.slice(0, 15), config)
             message.channel.send("<@" + user.id + "> kullanıcısının toplam " + cezaSayi + " cezası bulunmakta son 15 ceza aşağıda belirtilmiştir. Tüm ceza bilgi dosyasını indirmek için 🚫 emojisine, ceza sayılarına bakmak için ❔ emojisine basabilirsin.Tekli bir cezaya bakmak için `!ceza ID` komutunu uygulayınız. ```fix\n" + outi + "\n``` ").then(async msg => {
 
+            
                 let reactions = ['🚫', '❔'];
                 for(let reaction of reactions) await msg.react(reaction);
+        
+                    const filter = (reaction, user) => {
+                        return reaction.emoji.name === '🚫' && user.id === message.author.id;
+                    };
+                    
+                    const filter2 = (reaction, user) => {
+                        return reaction.emoji.name === '❔' && user.id === message.author.id;
+                    };
+                    const collector = msg.createReactionCollector({ filter, max: 1, time: 30000 });
+                    
+                    const collector2 = msg.createReactionCollector({ filter2, max: 1, time: 30000 });
+                    
                 
-                const first= msg.createReactionCollector((reaction, user) => reaction.emoji.name == "🚫" && user.id == message.author.id, { time: 30000 });
-                                const second = msg.createReactionCollector((reaction, user) => reaction.emoji.name == "❔" && user.id == message.author.id, { time: 30000 });
-                
-                first.on('collect', async reaction => {
-                            message.channel.send(`${user} kullanıcısının toplam ${datax.length - 1} cezası aşağıdaki belgede yazmaktadır.`, { files: [{ attachment: Buffer.from(out), name: `${user.user.username}_cezalar.txt` }] }).then(msg => {
-                                setTimeout(() => { msg.delete(); }, 15000);
-                            })    })
-                            second.on('collect', async reaction => {
+                    collector.on('collect', (collected, reason) => {
+                        message.channel.send({content: `${user} kullanıcısının toplam ${datax.length - 1} cezası aşağıdaki belgede yazmaktadır.`,  files: [{ attachment: Buffer.from(out), name: `${user.user.username}_cezalar.txt` }] }).then(msg => {
+                            setTimeout(() => { msg.delete(); }, 15000);
+                        })
+                    })
+                        collector2.on('collect', async(collected, reason) => {
                             let filterArr = res.map(x => (x.ceza))
                             let chatMute = filterArr.filter(x => x == "Chat Mute").length || 0
                             let voiceMute = filterArr.filter(x => x == "Voice Mute").length || 0
                             let jail = filterArr.filter(x => x == "Cezalı").length || 0
                             let ban = filterArr.filter(x => x == "Yasaklı").length || 0
                             let puan = await this.client.punishPoint(user.id)
-                            msg.edit("" + user.user.tag + " kullanıcısının ceza bilgileri aşağıda belirtilmiştir:\n\nChat Mute: " + chatMute + " kez.\nSes Mute: " + voiceMute + " kez.\nCezalı Bilgisi: "+ jail + " kez.\nBan Bilgisi: " + ban + " kez.\n\nKullanıcı toplamda " + cezaSayi + " kez kural ihlali yapmış, kullanıcının ceza puanı "+puan+".", {code: "js"})
+                            msg.edit("\`\`\`" + user.user.tag + " kullanıcısının ceza bilgileri aşağıda belirtilmiştir:\n\nChat Mute: " + chatMute + " kez.\nSes Mute: " + voiceMute + " kez.\nCezalı Bilgisi: "+ jail + " kez.\nBan Bilgisi: " + ban + " kez.\n\nKullanıcı toplamda " + cezaSayi + " kez kural ihlali yapmış, kullanıcının ceza puanı "+puan+".\`\`\`")
+                            
                         })
-                    
+                        
                     } )  
         })
     }
