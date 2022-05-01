@@ -44,12 +44,13 @@ const row = new Discord.MessageActionRow()
     .setEmoji("➡️")
     .setStyle('PRIMARY'),
 );       
-       var msg = await message.channel.send({ embeds: [cancık], components: [row]})
+       var msg = await message.channel.send({ embeds: [cancık]})
        var filter = (button) => button.user.id === message.author.id;
        const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
 
 if (liste.length > 10) {
 
+    msg.edit({components: [row]})
     collector.on('collect', async (button) => {
         if (button.customId === "SonrakiSayfa") {
             if (liste.slice((page + 1) * 10 - 10, (page + 1) * 10).length <= 0) return;
