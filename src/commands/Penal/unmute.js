@@ -50,12 +50,10 @@ class Unmute extends Command {
     new Discord.MessageButton()
       .setCustomId('ChatMute')
       .setLabel("Chat Mute")
-      .setEmoji(`${this.client.emojis.cache.find(x => x.name === "canzade_unmute")}`)
       .setStyle('PRIMARY'),
     new Discord.MessageButton()
       .setCustomId('VoiceMute')
       .setLabel("Voice Mute")
-      .setEmoji(`${this.client.emojis.cache.find(x => x.name === "zade_vunmute")}`)
       .setStyle('PRIMARY'),
       new Discord.MessageButton()
       .setCustomId('CANCEL')
