@@ -14,3 +14,4 @@ Botu sıfırdan kodlamadım önceki v12 olarak paylaştığım bot hatalarla dol
 ![image](https://user-images.githubusercontent.com/77938499/162772361-2b79f96a-7f87-4770-8c60-4b0c84e51496.png)
 ![image](https://user-images.githubusercontent.com/77938499/162772816-1f6e795d-6bee-4ce9-a7b8-a72789d154b8.png)
 ![image](https://user-images.githubusercontent.com/77938499/162772396-5772f8a8-ab84-4464-af14-bb316dcbcca9.png)
+![image](https://user-images.githubusercontent.com/77938499/166150104-5abd502d-04f1-4f8c-8918-96141015bc37.png)
