@@ -55,7 +55,7 @@ class Rolyonet extends Command {
                         dynamic: true
                     })})
                     .setTimestamp()
-                this.client.channels.cache.get(this.client.config.channels.moderationLogs).send(emeed)
+                    this.client.channels.cache.get(server.BotRoleManageLog).send({ embeds: [emeed] })
                 roller.findOne({
                     user: user.id
                 }, async (err, res) => {
