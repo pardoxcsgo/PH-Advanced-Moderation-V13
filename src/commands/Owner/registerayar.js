@@ -17,28 +17,76 @@ class TeyitAyar extends Command {
   });
   if(!server.BotOwner.includes(message.author.id)) return
 
-    if (!args[0]) return this.client.yolla(`
-Yanlış bir argüman kullandınız!  
-Teyit formatını değiştirmek için **!teyitmod değiştir**
-Mevcut kayıt formatı **${server.GenderRegister ? ".e @Zade Can 22" : ".isim @Zade Can 22 - Buttonlu Teyit"}**`, message.author, message.channel)
+const row = new Discord.MessageActionRow()
+.addComponents(
+  new Discord.MessageButton()
+    .setCustomId('GenderRegister')
+    .setLabel("Cinsiyet Teyit")
+    .setStyle('PRIMARY'),
+    new Discord.MessageButton()
+    .setCustomId('ButtonRegister')
+    .setLabel("Button Teyit")
+    .setStyle('PRIMARY'),
+    new Discord.MessageButton()
+    .setCustomId('CANCEL')
+    .setLabel("İptal")
+    .setStyle('DANGER'))
 
-if (args[0] == "değiştir") {
-    if(!server.GenderRegister) {
+
+   const embed = new Discord.MessageEmbed()
+ 
+   .setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL({ dynamic: true })})
+   .setColor("RANDOM")
+   .setDescription(`
+Teyit modunu değiştirmek için aşağıdaki buttonlardan teyit modları arasından seçim yapın.
+Şuanki teyit modu ${server.GenderRegister ? ".e @Zade Can 22" :  ".isim @Zade Can 22 - Buttonlu Teyit. "}`)
+ 
+
+let msg = await message.channel.send({ embeds: [embed], components: [row] })
+
+var filter = (button) => button.user.id === message.author.id;
+const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
+
+    collector.on("collect", async (button) => {
+       
+      if(button.customId === "GenderRegister") {
+
+      row.components[0].setDisabled(true)
+      msg.edit({ components: [row] })
+
       server.GenderRegister = true;
       server.save();
-        this.client.yolla(`
-Kayıt formatı başarıyla değiştirildi. 
-Artık **${server.GenderRegister ? ".e @Zade Can 22" : ".isim @Zade Can 22 - Buttonlu Teyit"}** şeklinde kayıt gerçekleştirebilecek!`, message.author, message.channel);
-    } 
-    else if(server.GenderRegister) {
-      server.GenderRegister = false;
-      server.save();
-      this.client.yolla(`
-Kayıt formatı başarıyla değiştirildi. 
-Artık **${!server.GenderRegister ? ".isim @Zade Can 22 - Buttonlu Teyit" : ".e @Zade Can 22"}** şeklinde kayıt gerçekleştirebilecek!`, message.author, message.channel); 
-    }
+      button.reply("Teyit modu cinsiyet olarak değiştirildi. Artık \`.e @Zade Can 22\` ile kayıt yapılabilecek")
+
+      } else if(button.customId === "ButtonRegister") {
+        row.components[1].setDisabled(true)
+        msg.edit({ components: [row] })
+
+        server.GenderRegister = false;
+        server.save();
+
+        button.reply("Teyit modu buttonlu olarak değiştirildi. Artık \`.isim @Zade Can 22 - Button\` ile kayıt yapılabilecek")
+
+      } else if(button.customId === "CANCEL") {
+        row.components[0].setDisabled(true)
+        row.components[1].setDisabled(true)
+        row.components[2].setDisabled(true)
+        msg.edit({ components: [row] })
+
+        button.reply("İşlem iptal edildi.")
+
+
+      }
+    })
+
+    collector.on("end", async (button) => {
+
+      row.components[0].setDisabled(true)
+      row.components[1].setDisabled(true)
+      row.components[2].setDisabled(true)
+      msg.edit({ components: [row] })
+    })
   }
-}
 
 }
 
