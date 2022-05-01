@@ -1,5 +1,4 @@
-﻿const baseCmd = require("../../base/Command");
-const moment = require("moment");
+const baseCmd = require("../../base/Command");
 const kayıtlar = require("../../models/kayıtlar.js")
 const data = require("../../models/cezalar.js")
 let serverSettings = require("../../models/serverSettings");
@@ -16,7 +15,7 @@ class İsim extends baseCmd {
   }
   async run(message, args, client) {
 
-    let server = await serverSettings.findOne({
+  let server = await serverSettings.findOne({
       guildID: message.guild.id
   });
 
@@ -77,7 +76,6 @@ rolü ve üstlerine ulaşabilirsiniz.
     return message.channel.send({ embeds: [embed] })
   }
 
-
   const newnick = `${member.user.username.includes(server.Tag) ? server.Tag : (server.SecondaryTag ? server.SecondaryTag : (server.SecondaryTag || ""))} ${nick} | ${age}`;
   await member.setNickname(newnick);
 
@@ -90,275 +88,288 @@ if (!registerModel) registerModel = await isimler.findOne({
     isimler: []
   });
 
-isimler.findOne({user: member.id}, async(err, res) => {
-  if(!res) {
-      const nicks = member.user.username.includes(server.Tag)
-      if (nicks) await member.setNickname(`${server.Tag} ${nick} | ${age}` )
-      else await member.setNickname(`${server.SecondaryTag} ${nick} | ${age}`);
-      const amaç = new Discord.MessageEmbed()
-      .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
-      .setDescription(`
-${member} üyesinin ismi başarıyla "${nick} | ${age}" ismine değiştirildi`)
-.setFooter({ text: "Üyenin ceza puanı "+puan+" (" + durum + ")"})
-.setColor("RANDOM")
-message.channel.send({ embeds: [amaç] })
-       if(message.channel.id === server.RegisterChat) {
-           if(!this.client.kayıtlar.has(message.author.id)) {
-               this.client.kayıtlar.set(message.author.id, member.id)
-           }
-       }
-  } else {
-    const nicks = member.user.username.includes(server.Tag)
-    if (nicks) await member.setNickname(`${server.Tag} ${nick} | ${age}` )
-    else await member.setNickname(`${server.SecondaryTag} ${nick} | ${age}`);
+
+
+    if(server.GenderRegister) {
+        isimler.findOne({user: member.id}, async(err, res) => { 
+        if(!res) {
+        let arr = []
+        arr.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
+        let newData = new isimler({ 
+        user: member.id,
+        isimler: arr
+      })
+      newData.save().catch(e => console.log(e))
+    } else {
+      res.isimler.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
+      res.save().catch(e => console.log(e))
+    }
+          const amaç = new Discord.MessageEmbed()
+            .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
+            .setDescription(`${!res ? `${member} üyesinin ismi başarıyla "${nick} | ${age}" ismine değiştirildi` : `
+${member} üyesinin ismi başarıyla "${nick} | ${age}" ismine değiştirildi, bu üye daha önce bu isimlerle kayıt olmuş.
+            
+${this.client.emojis.cache.find(x => x.name === this.client.config.emojis.no_name)} Kişinin toplamda **${res.isimler.length}** isim kayıtı bulundu.
+${res.isimler.map(x => `\`• ${x.isim}\` (${x.state})`).join("\n")}
+      
+Kişinin önceki isimlerine \`!isimler @üye\` komutuyla bakarak kayıt işlemini gerçekleştirmeniz önerilir.`}`)
+      .setFooter({ text: "Üyenin ceza puanı "+puan+" (" + durum + ")"})
+      .setColor("RANDOM")//  - (${x.yetkili.replace(message.author.id, `<@${x.yetkili}>`).replace(`Yok`,`Yok`)})
+            message.channel.send({ embeds: [amaç] })
+      if(message.channel.id === server.RegisterChat) {
+                 if(!this.client.kayıtlar.has(message.author.id)) {
+                     this.client.kayıtlar.set(message.author.id, member.id)
+                 }
+                }
+              })
+            } else
+
+ 
+             isimler.findOne({user: member.id}, async(err, res) => { 
       const memeaç = new Discord.MessageEmbed()
       .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
-      .setDescription(`
+      .setDescription(`${!res ? `${member} üyesinin ismi başarıyla "${nick} | ${age}" ismine değiştirildi` : `
 ${member} üyesinin ismi başarıyla "${nick} | ${age}" ismine değiştirildi, bu üye daha önce bu isimlerle kayıt olmuş.
       
 ${this.client.emojis.cache.find(x => x.name === this.client.config.emojis.no_name)} Kişinin toplamda **${res.isimler.length}** isim kayıtı bulundu.
 ${res.isimler.map(x => `\`• ${x.isim}\` (${x.state})`).join("\n")}
 
-Kişinin önceki isimlerine \`!isimler @üye\` komutuyla bakarak kayıt işlemini gerçekleştirmeniz önerilir.`)
+Kişinin önceki isimlerine \`!isimler @üye\` komutuyla bakarak kayıt işlemini gerçekleştirmeniz önerilir.`}`)
 .setFooter({ text: "Üyenin ceza puanı "+puan+" (" + durum + ")"})
 .setColor("RANDOM")//  - (${x.yetkili.replace(message.author.id, `<@${x.yetkili}>`).replace(`Yok`,`Yok`)})
-message.channel.send({ embeds: [memeaç] })//.then(m => {setTimeout(() => { m.delete(); }, 10000);}).then(m => message.react(this.client.emojis.cache.find(x => x.name === this.client.config.emojis.yes_name)))
-       if(message.channel.id === server.RegisterChat) {
+      
+if(message.channel.id === server.RegisterChat) {
            if(!this.client.kayıtlar.has(message.author.id)) {
                this.client.kayıtlar.set(message.author.id, member.id)
            }
        }
-  } 
+
+const row = new Discord.MessageActionRow()
+      .addComponents(
+        new Discord.MessageButton()
+          .setCustomId('Erkek')
+          .setLabel("Erkek")
+          .setStyle('PRIMARY'),
+        new Discord.MessageButton()
+          .setCustomId('Kadın')
+          .setLabel("Kadın")
+          .setStyle('PRIMARY'),
+        new Discord.MessageButton()
+          .setCustomId('CANCEL')
+          .setLabel("İptal")
+          .setStyle('DANGER'),
+      );
+ let msg = await message.channel.send({ components: [row], embeds: [memeaç] })
+
+ var filter = (button) => button.user.id === message.author.id;
+ const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
+
+ collector.on('end', async (button, user) => {
+    row.components[0].setDisabled(true) 
+    row.components[1].setDisabled(true) 
+    row.components[2].setDisabled(true) 
+    msg.edit({ components: [row] }); 
     
-})  
-
-  const onay = await message.channel.awaitMessages((m) => m.author.id == message.author.id && ["erkek", "kadın", "iptal", "e" , "k"].some(cevap => m.content.toLowerCase().includes(cevap)), {max: 1, time: 1000 * 30 });
-  if (onay.size < 1) {
-    isimler.findOne({user: member.id}, async(err,res) => {
-      if(!res) {
-      let arr = []
-      arr.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
-      let newData = new isimler({ 
-      user: member.id,
-      isimler: arr
-    })
-    newData.save().catch(e => console.log(e))
-  } else {
-    res.isimler.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
-    res.save().catch(e => console.log(e))
-  }
-})
-  /*  this.client.channels.cache.get(server.RegisterLog).send(new Discord.MessageEmbed().setFooter({ text: `Üyenin ceza puanı `+puan+``+ ` - ` + moment(Date.now()).format("LLL")+""})
-    .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
-    .setColor("RANDOM").setDescription(`
-    **İsmi Değiştirilen Üye:** ${member.toString()} - ${member.id}
-    **İsim Değiştiren Yetkili:** ${message.author} - ${message.author.id}
-    **Yeni İsim:** ${newnick}
-    `))*/
-    return  //message.channel.send({ embeds: [new Discord.MessageEmbed().setDescription(`${member.toString()} adlı üyenin kaydı herhangi bir işlem yapılmadığından dolayı iptal edildi. Databaseye -İsim Değiştirme- olarak veri yollandı.`)}]).then(x => {setTimeout(() => { x.delete(); }, 5000);});
-
-  }
-  if (server.GenderRegister) return
-
-  
-  let kullanici = args.length > 0 ? message.mentions.users.first() || await this.client.client_üye(args[0]) || message.author : message.author
-  let uye = message.guild.member(kullanici);
-  const onayContent = onay.first().content.toLowerCase();
-  if (onayContent.includes(`.e`) || onayContent.includes(`!e`) || onayContent.includes(`!erkek`) || onayContent.includes(`.erkek`)) {
-    if (server && server.TaggedMode === true) {
-      if(!member.user.username.includes(server.Tag) && !member.premiumSince && !member.roles.cache.has(server.VipRole)) return this.client.yolla("Şuanlık bu sunucuda sunucuda taglı alım mevcuttur ( "+server.Tag+" ) tagını alarak kayıt olabilirsin, bir süre sonra tagsız alıma geçildiğinde gelmeyi de tercih edebilirsin.", message.author, message.channel)
-    }
-    await kayıtlar.findOne({ user: message.author.id }, async (err, res) => {
-      if (res) {
-        if (res.kayıtlar.includes(member.id)) {
-          res.erkek = res.erkek
-          res.save().catch(e => console.log(e))
-        } else {
-          res.kayıtlar.push(member.id)
-          res.erkek = res.erkek + 1
-          res.toplam = res.toplam + 1
-          res.save().catch(e => console.log(e))
-        }
-      } else if (!res) {
+      isimler.findOne({user: member.id}, async(err,res) => {
+        if(!res) {
         let arr = []
-        arr.push(member.id)
-        const data = new kayıtlar({
-          user: message.author.id,
-          erkek: 1,
-          kadın: 0,
-          toplam: 1,
-          kayıtlar: arr
-        })
-        data.save().catch(e => console.log(e))
-      }
-    })
-    
-    if(member.roles.cache.has(server.ManRole[0]) || member.roles.cache.has(server.WomanRole[0])) {
-      if(this.client.kayıtlar.has(message.author.id)) {
-          this.client.kayıtlar.delete(message.author.id)
-      }
-      return this.client.yolla("<@"+member+"> kullanıcısı zaten sunucumuza kayıtlı olduğundan dolayı kayıt işlemi iptal edildi!", message.author, message.channel)
-  }
-
-
- 
-    if(!member.roles.cache.has(server.ManRole[0])) {
-      setTimeout(() => {
-        member.roles.add(server.ManRole)
-      }, 2000)
-      member.roles.remove(server.UnregisteredRole)
-     const embed = new Discord.MessageEmbed()
-     .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
-     .setColor("RANDOM")
-     .setDescription(`${member.toString()} üyesine ${server.ManRole.map(x => `<@&${x}>`)} rolleri verildi.`)
-     .setFooter({ text: "Üyenin ceza puanı "+puan+" (" + durum + ")"});
-   message.channel.send({ embeds: [embed] })//.then(x => {setTimeout(() => { x.delete(); }, 5000);})
-
-     message.react(this.client.emojis.cache.find(x => x.name === this.client.config.emojis.yes_name))
-      this.client.channels.cache.get(server.GeneralChat).send("<@"+member+"> adlı üye aramıza yeni katıldı bir hoş geldin diyelim ve senle birlikte topluluğumuz **"+message.guild.memberCount+"** kişi oldu!").then(msg => { setTimeout(() => { msg.delete(); }, 10000); })
-  
-    isimler.findOne({user: member.id}, async(err,res) => {
-      if(!res) {
-      let arr = []
-      arr.push({isim: member.displayName, state: ""+server.ManRole.map(x => `<@&${x}>`)+"", yetkili: message.author.id})
-      let newData = new isimler({ 
+        arr.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
+        let newData = new isimler({ 
         user: member.id,
         isimler: arr
       })
       newData.save().catch(e => console.log(e))
     } else {
-      res.isimler.push({isim: member.displayName, state: ""+server.ManRole.map(x => `<@&${x}>`)+"", yetkili: message.author.id})
+      res.isimler.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
       res.save().catch(e => console.log(e))
     }
-  })
-}
-  
-  /*  this.client.channels.cache.get(server.RegisterLog).send(new Discord.MessageEmbed()
-    .setColor("RANDOM")
-    .setFooter({ text: `Üyenin ceza puanı `+puan+``+ ` - ` + moment(Date.now()).format("LLL")+""})
-    .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
-    .setDescription(`
-    Üye: ${member.toString()} - **${member.id}**
-    Yetkili: ${message.author} - **${message.author.id}**
-    İsim: "${newnick}"
-    Cinsiyet: Erkek
-     `))*/
-  }
+})
+    
 
-  if (onayContent.includes(`.k`) || onayContent.includes(`!k`) || onayContent.includes(`!kadın`) || onayContent.includes(`.kadın`)) {
-    if (server && server.TaggedMode === true) {
-      if(!member.user.username.includes(server.Tag) && !member.premiumSince && !member.roles.cache.has(server.VipRole)) return this.client.yolla("Şuanlık bu sunucuda sunucuda taglı alım mevcuttur ( "+server.Tag+" ) tagını alarak kayıt olabilirsin, bir süre sonra tagsız alıma geçildiğinde gelmeyi de tercih edebilirsin.", message.author, message.channel)
-    }
-    await kayıtlar.findOne({ user: message.author.id }, async (err, res) => {
-      if (res) {
-        if (res.kayıtlar.includes(member.id)) {
-          res.kadın = res.kadın
-          res.save().catch(e => console.log(e))
-        } else {
-          res.kayıtlar.push(member.id)
-          res.kadın = res.kadın + 1
-          res.toplam = res.toplam + 1
-          res.save().catch(e => console.log(e))
+});
+ collector.on('collect', async (button, user) => {
+ 
+      if (button.customId === "Erkek") {
+        row.components[0].setDisabled(true) 
+        row.components[1].setDisabled(true) 
+        row.components[2].setDisabled(true) 
+        msg.edit({ components: [row] });
+
+        if (server && server.TaggedMode === true) {
+            if(!member.user.username.includes(server.Tag) && !member.premiumSince && !member.roles.cache.has(server.VipRole)) return this.client.yolla("Şuanlık bu sunucuda sunucuda taglı alım mevcuttur ( "+server.Tag+" ) tagını alarak kayıt olabilirsin, bir süre sonra tagsız alıma geçildiğinde gelmeyi de tercih edebilirsin.", message.author, message.channel)
+          }
+          await kayıtlar.findOne({ user: message.author.id }, async (err, res) => {
+            if (res) {
+              if (res.kayıtlar.includes(member.id)) {
+                res.erkek = res.erkek
+                res.save().catch(e => console.log(e))
+              } else {
+                res.kayıtlar.push(member.id)
+                res.erkek = res.erkek + 1
+                res.toplam = res.toplam + 1
+                res.save().catch(e => console.log(e))
+              }
+            } else if (!res) {
+              let arr = []
+              arr.push(member.id)
+              const data = new kayıtlar({
+                user: message.author.id,
+                erkek: 1,
+                kadın: 0,
+                toplam: 1,
+                kayıtlar: arr
+              })
+              data.save().catch(e => console.log(e))
+            }
+          })
+          
+          if(member.roles.cache.has(server.ManRole[0]) || member.roles.cache.has(server.WomanRole[0])) {
+            if(this.client.kayıtlar.has(message.author.id)) {
+                this.client.kayıtlar.delete(message.author.id)
+            }
+            return button.reply("<@"+member+"> kullanıcısı zaten sunucumuza kayıtlı olduğundan dolayı kayıt işlemi iptal edildi!")
         }
-      } else if (!res) {
-        let arr = []
-        arr.push(member.id)
-        const data = new kayıtlar({
-          user: message.author.id,
-          erkek: 0,
-          kadın: 1,
-          toplam: 1,
-          kayıtlar: arr
+      
+      
+       
+          if(!member.roles.cache.has(server.ManRole[0])) {
+            setTimeout(() => {
+              member.roles.add(server.ManRole)
+            }, 2000)
+            member.roles.remove(server.UnregisteredRole)
+           const embed = new Discord.MessageEmbed()
+           .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
+           .setColor("RANDOM")
+           .setDescription(`${member.toString()} üyesine ${server.ManRole.map(x => `<@&${x}>`)} rolleri verildi.`)
+           .setFooter({ text: "Üyenin ceza puanı "+puan+" (" + durum + ")"});
+      
+           button.reply({ embeds: [embed] })
+
+           message.react(this.client.emojis.cache.find(x => x.name === this.client.config.emojis.yes_name))
+            this.client.channels.cache.get(server.GeneralChat).send("<@"+member+"> adlı üye aramıza yeni katıldı bir hoş geldin diyelim ve senle birlikte topluluğumuz **"+message.guild.memberCount+"** kişi oldu!").then(msg => { setTimeout(() => { msg.delete(); }, 10000); })
+        
+          isimler.findOne({user: member.id}, async(err,res) => {
+            if(!res) {
+            let arr = []
+            arr.push({isim: member.displayName, state: ""+server.ManRole.map(x => `<@&${x}>`)+"", yetkili: message.author.id})
+            let newData = new isimler({ 
+              user: member.id,
+              isimler: arr
+            })
+            newData.save().catch(e => console.log(e))
+          } else {
+            res.isimler.push({isim: member.displayName, state: ""+server.ManRole.map(x => `<@&${x}>`)+"", yetkili: message.author.id})
+            res.save().catch(e => console.log(e))
+          }
         })
-        data.save().catch(e => console.log(e))
       }
-    })
-    if(member.roles.cache.has(server.ManRole[0]) || member.roles.cache.has(server.WomanRole[0])) {
-      if(this.client.kayıtlar.has(message.author.id)) {
-          this.client.kayıtlar.delete(message.author.id)
-      }
-      return this.client.yolla("<@"+member+"> kullanıcısı zaten sunucumuza kayıtlı olduğundan dolayı kayıt işlemi iptal edildi!", message.author, message.channel)
-  }
 
+    } else if (button.customId === "CANCEL") {
 
-  
-    if(!member.roles.cache.has(server.WomanRole[0])) {
-      setTimeout(() => {
-        member.roles.add(server.WomanRole)
-      }, 2000)
-      member.roles.remove(server.WomanRole)
-     const embed = new Discord.MessageEmbed()
-     .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
-     .setColor("RANDOM")
-     .setDescription(`${member.toString()} üyesine ${server.WomanRole.map(x => `<@&${x}>`)} rolleri verildi.`)
-     .setFooter({ text: "Üyenin ceza puanı "+puan+" ("+ durum + ")"});
-   message.channel.send({ embeds: [embed] })//.then(x => {setTimeout(() => { x.delete(); }, 5000);}) 
-     message.react(this.client.emojis.cache.find(x => x.name === this.client.config.emojis.yes_name))
-      this.client.channels.cache.get(server.GeneralChat).send("<@"+member+"> adlı üye aramıza yeni katıldı bir hoş geldin diyelim ve senle birlikte topluluğumuz **"+message.guild.memberCount+"** kişi oldu!").then(msg => { setTimeout(() => { msg.delete(); }, 10000); })
-  
+        row.components[0].setDisabled(true) 
+        row.components[1].setDisabled(true) 
+        row.components[2].setDisabled(true) 
+        msg.edit({ components: [row] });
 
-    isimler.findOne({user: member.id}, async(err,res) => {
-      if(!res) {
-      let arr = []
-      arr.push({isim: member.displayName, state: "<"+server.WomanRole.map(x => `<@&${x}>`) +"", yetkili: message.author.id})
-      let newData = new isimler({
+        const embed = new Discord.MessageEmbed()
+        .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
+        .setColor("RANDOM")
+        .setDescription(`${member.toString()} adlı kullanıcının kayıt işlemi iptal edildi.`);
+        button.reply({ embeds: [embed] })
+
+      isimler.findOne({user: member.id}, async(err,res) => {
+        if(!res) {
+        let arr = []
+        arr.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
+        let newData = new isimler({ 
         user: member.id,
         isimler: arr
       })
       newData.save().catch(e => console.log(e))
     } else {
-      res.isimler.push({isim: member.displayName, state: ""+server.WomanRole.map(x => `<@&${x}>`) +"", yetkili: message.author.id})
+      res.isimler.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
       res.save().catch(e => console.log(e))
     }
-    })
-  }
- 
-  /*  this.client.channels.cache.get(server.RegisterLog).send(new Discord.MessageEmbed()
-    .setColor("RANDOM")
-    .setFooter({ text: `Üyenin ceza puanı `+puan+``+ ` - ` + moment(Date.now()).format("LLL")+""})
-    .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
-    .setDescription(`
-    Üye: ${member.toString()} - **${member.id}**
-    Yetkili: ${message.author} - **${message.author.id}**
-    İsim: "${newnick}"
-    Cinsiyet: Kadın
-     `))*/
+})
+
+
+      } else if (button.customId === "Kadın") {
+        row.components[0].setDisabled(true) 
+        row.components[1].setDisabled(true) 
+        row.components[2].setDisabled(true) 
+        msg.edit({ components: [row] });
+
+        if (server && server.TaggedMode === true) {
+            if(!member.user.username.includes(server.Tag) && !member.premiumSince && !member.roles.cache.has(server.VipRole)) return this.client.yolla("Şuanlık bu sunucuda sunucuda taglı alım mevcuttur ( "+server.Tag+" ) tagını alarak kayıt olabilirsin, bir süre sonra tagsız alıma geçildiğinde gelmeyi de tercih edebilirsin.", message.author, message.channel)
+          }
+          await kayıtlar.findOne({ user: message.author.id }, async (err, res) => {
+            if (res) {
+              if (res.kayıtlar.includes(member.id)) {
+                res.kadın = res.kadın
+                res.save().catch(e => console.log(e))
+              } else {
+                res.kayıtlar.push(member.id)
+                res.kadın = res.kadın + 1
+                res.toplam = res.toplam + 1
+                res.save().catch(e => console.log(e))
+              }
+            } else if (!res) {
+              let arr = []
+              arr.push(member.id)
+              const data = new kayıtlar({
+                user: message.author.id,
+                erkek: 0,
+                kadın: 1,
+                toplam: 1,
+                kayıtlar: arr
+              })
+              data.save().catch(e => console.log(e))
+            }
+          })
+          if(member.roles.cache.has(server.ManRole[0]) || member.roles.cache.has(server.WomanRole[0])) {
+            if(this.client.kayıtlar.has(message.author.id)) {
+                this.client.kayıtlar.delete(message.author.id)
+            }
+            return button.reply("<@"+member+"> kullanıcısı zaten sunucumuza kayıtlı olduğundan dolayı kayıt işlemi iptal edildi!")
+        }
+      
+          if(!member.roles.cache.has(server.WomanRole[0])) {
+            setTimeout(() => {
+              member.roles.add(server.WomanRole)
+            }, 2000)
+            member.roles.remove(server.WomanRole)
+           const embed = new Discord.MessageEmbed()
+           .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
+           .setColor("RANDOM")
+           .setDescription(`${member.toString()} üyesine ${server.WomanRole.map(x => `<@&${x}>`)} rolleri verildi.`)
+           .setFooter({ text: "Üyenin ceza puanı "+puan+" ("+ durum + ")"});
+           button.reply({ embeds: [embed] })
+           message.react(this.client.emojis.cache.find(x => x.name === this.client.config.emojis.yes_name))
+            this.client.channels.cache.get(server.GeneralChat).send("<@"+member+"> adlı üye aramıza yeni katıldı bir hoş geldin diyelim ve senle birlikte topluluğumuz **"+message.guild.memberCount+"** kişi oldu!").then(msg => { setTimeout(() => { msg.delete(); }, 10000); })
+        
+      
+          isimler.findOne({user: member.id}, async(err,res) => {
+            if(!res) {
+            let arr = []
+            arr.push({isim: member.displayName, state: "<"+server.WomanRole.map(x => `<@&${x}>`) +"", yetkili: message.author.id})
+            let newData = new isimler({
+              user: member.id,
+              isimler: arr
+            })
+            newData.save().catch(e => console.log(e))
+          } else {
+            res.isimler.push({isim: member.displayName, state: ""+server.WomanRole.map(x => `<@&${x}>`) +"", yetkili: message.author.id})
+            res.save().catch(e => console.log(e))
+          }
+          })
+        }
+    }
+});
+
+}) 
+})
   }
 
-  if (onayContent.includes(`.iptal`) || onayContent.includes(`!iptal`)) {
-    const embed = new Discord.MessageEmbed()
-      .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
-      .setColor("RANDOM")
-      .setDescription(`${member.toString()} adlı kullanıcının kayıt işlemi iptal edildi.`);
-      message.channel.send({ embeds: [embed] });
-  /*  await isimler.findOne({
-      user: member.user.id
-    }, {
-      isimler: [ ...registerModel.isimler, nickData ]
-    });*/
-   /* this.client.channels.cache.get(server.RegisterLog).send(new Discord.MessageEmbed().setFooter({ text: `Üyenin ceza puanı `+puan+``+ ` - ` + moment(Date.now()).format("LLL")+""})
-    .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })}).setColor("RANDOM").setDescription(`
-    **İsmi Değiştirilen Üye:** ${member.toString()} - ${member.id}
-    **İsim Değiştiren Yetkili:** ${message.author} - ${message.author.id}
-    **Yeni İsim:** ${newnick}
-    `))*/
-    isimler.findOne({user: member.id}, async(err,res) => {
-      if(!res) {
-      let arr = []
-      arr.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
-      let newData = new isimler({ 
-      user: member.id,
-      isimler: arr
-    })
-    newData.save().catch(e => console.log(e))
-  } else {
-    res.isimler.push({isim: newnick, state: "İsim Değiştirme", yetkili: message.author.id})
-    res.save().catch(e => console.log(e))
-  }
-})
-  }
-})
-  }
 }
 
 
