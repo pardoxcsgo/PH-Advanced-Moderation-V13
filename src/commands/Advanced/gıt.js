@@ -13,38 +13,70 @@ class Git extends Command {
         if(!kullanici) return this.client.yolla("Odasına gitmek istedğiniz kullanıcıyı belirtmeniz gerekir", message.author, message.channel)
         if(!kullanici.voice.channel) return this.client.yolla("Odasına gitmek istediğiniz kullanıcı ses kanallarında bulunmuyor", message.author, message.channel)
         if(message.member.voice.channel.id === kullanici.voice.channel.id) return this.client.yolla("Odasına gitmek istediğinizi kullanıcı ile aynı odada bulunuyorsunuz!", message.author, message.channel)
-        const filter = (reaction, user) => {
-        return (["yes_zade", "no_zade"].includes(reaction.emoji.name) && user.id === kullanici.id);
-    };
+        if (kullanici.id == message.author.id) return this.client.yolla("Kullanıcılar kendilerine ceza-i işlem uygulayamaz.", message.author, message.channel)
+
+        const row = new Discord.MessageActionRow()
+        .addComponents(
+            new Discord.MessageButton()
+            .setCustomId("GİT")
+            .setLabel("GİT")
+            .setStyle("SUCCESS"),
+            new Discord.MessageButton()
+            .setCustomId("GİTME")
+            .setLabel("GİTME")
+            .setStyle("PRIMARY"),
+            new Discord.MessageButton()
+            .setCustomId("İPTAL")
+            .setLabel("İPTAL")
+            .setStyle("DANGER")
+        )
+       
         let teklif = new Discord.MessageEmbed()
         .setAuthor({ name: message.author.tag, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
         .setDescription(`${message.author} adlı kullanıcı sizin sesli kanalınıza gelmek istiyor kabul ediyor musunuz?`)
         .setColor("RANDOM")
-        let mesaj = await message.channel.send({ embeds: [teklif]})
-        await mesaj.react(this.client.emojis.cache.find(x => x.name === "yes_zade"));
-        await mesaj.react(this.client.emojis.cache.find(x => x.name === "no_zade"));
-        mesaj.awaitReactions({filter, 
-            max: 1,
-            time: 60000,
-            errors: ["time"]
-            })
-            .then(collected => {
-            const reaction = collected.first();
-            if (reaction.emoji.name === "yes_zade") {
-        let kabul = new Discord.MessageEmbed()
-        .setAuthor({ name: message.author.tag, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
-        .setDescription(`${message.author} başarıyla **${kullanici.voice.channel.name}** adlı kanala gittiniz.`)
-        .setColor("RANDOM")
-        message.channel.send({ embeds: [kabul] }).then(msg => { setTimeout(() => { msg.delete(); }, 10000); })
+    
+          let msg = await message.channel.send({ embeds: [teklif], components: [row] })
+
+        var filter = (button) => button.user.id === kullanici.id;
+        const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
+       
+        collector.on("collect", async (button) => {
+           
+            if(button.customId === "GİT") {
+                row.components[0].setDisabled(true)
+                row.components[1].setDisabled(true)
+                row.components[2].setDisabled(true)
+                msg.edit({ components: [row] })
+
         message.member.voice.setChannel(kullanici.voice.channel);
-            } else {
-        let redd = new Discord.MessageEmbed()
-        .setAuthor({ name: message.author.tag, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
-        .setDescription(`${message.author} Sesli kanalına gitmek istediğiniz üye teklifinizi geri çevirdi!`)
-        .setColor("RANDOM")
-        message.channel.send({ embeds: [redd] }).then(msg => { setTimeout(() => { msg.delete(); }, 10000); })
-            }
-      }); 
+        button.reply(`Başarıyla ${message.member} kişisinin bulunduğu \`${message.member.voice.channel.name}\` isimli kanala gittiniz.`)
+            
+    } else if(button.customId === "GİTME") {
+        row.components[0].setDisabled(true)
+        row.components[1].setDisabled(true)
+        row.components[2].setDisabled(true)
+        msg.edit({ components: [row] })
+
+        button.reply("Odaya çekilme işlemi iptal edildi.")
+    } else if(button.customId === "İPTAL") {
+        row.components[0].setDisabled(true)
+        row.components[1].setDisabled(true)
+        row.components[2].setDisabled(true)
+        msg.edit({ components: [row] })
+
+    }
+        })
+
+        collector.on("end", async (button) => {
+            row.components[0].setDisabled(true)
+            row.components[1].setDisabled(true)
+            row.components[2].setDisabled(true)
+            msg.edit({ components: [row] })
+
+        })
+    
+   
     }
 }
 module.exports = Git;
