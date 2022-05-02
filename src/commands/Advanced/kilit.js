@@ -1,7 +1,6 @@
 const Command = require("../../base/Command.js")
-const { MessageEmbed } = require("discord.js")
+const Discord = require("discord.js")
 let serverSettings = require("../../models/serverSettings");
-const fs = require("fs")
 class Kanal extends Command {
     constructor(client) {
         super(client, {
@@ -15,63 +14,102 @@ class Kanal extends Command {
         });
 if(!message.member.roles.cache.has(server.GuildOwner) && !message.member.permissions.has("ADMINISTRATOR")) return
 
-if (!args[0]) return this.client.yolla(`
-Yanlış bir argüman kullandınız  
-!kanal kilit/aç = Komutu kullandığınız kanaldaki mesaj gönderme izinlerini kapatıp, açar.
-!kanal register kilit/aç = Register kategorisindeki tüm kanallara mesaj gönderme, ses kanalına bağlanma yetkisini ve teyit sistemini kapatır, açar.
-`, message.author, message.channel)
 
-  let channels = message.guild.channels.cache.filter(ch => ch.parentId == server.RegisterParent);
- 
-  if (args[0] == "kilit") {
-    message.channel.permissionOverwrites.edit(message.guild.id, {
-        SEND_MESSAGES: false
-    }).then(async() => {
-        await this.client.yolla("Kanal başarıyla kilitlendi.", message.author, message.channel)
-    })
-}
+const embed = new Discord.MessageEmbed()
+.setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL({ dynamic: true })})
+.setColor("RANDOM")
+.setDescription(`
+Bu kanal şuan: ${message.channel.permissionsFor(message.guild.id).has('SEND_MESSAGES') ? "Açık" : "Kapalı" }
+\`\`\`Komutu kullandığınız kanalın kilitlenmesini/açılmasını istiyorsanız: Kanal Kilit butonunu kullanın.\`\`\` 
+Register sistemi şuan: ${server.RegisterSystem ? "Açık" : "Kapalı"}
+\`\`\`Register voice kanallarının ve register sisteminin kilitlenmesini/açılmasını istiyorsanız: Register Kilit butonunu kullanın.\`\`\`
 
-if (args[0] == "aç") {
-    message.channel.permissionOverwrites.edit(message.guild.id, {
-        SEND_MESSAGES: true
-    }).then(async() => {
-        await this.client.yolla("Kanalın kilidi başarıyla açıldı.", message.author, message.channel)
-    })
-  }
-  if (args[0] === "register")  {
-  if (args[1] == "aç") {
-{
-    server.RegisterSystem = true;
-    server.save();
+`)
 
-        channels.forEach(ch => {
-          ch.permissionOverwrites.edit(`${server.UnregisteredRole}`, {
-              SEND_MESSAGES: true,
-              CONNECT: true
-          });
-      });
-    
-        this.client.yolla("Teyit kanalları ve teyit sistemi açıldı.", message.author, message.channel)  
+const row = new Discord.MessageActionRow()
+.addComponents(
+  new Discord.MessageButton()
+    .setCustomId('ChannelLocking')
+    .setLabel("Kanal Kilit")
+    .setEmoji("🔒")
+    .setStyle('PRIMARY'),
+  new Discord.MessageButton()
+    .setCustomId('RegisterLocking')
+    .setLabel("Register Kilit")
+    .setEmoji("🔒")
+    .setStyle('PRIMARY'),
+    new Discord.MessageButton()
+    .setCustomId('CANCEL')
+    .setLabel("İptal")
+    .setStyle('DANGER'));
+
+       var msg = await message.channel.send({ embeds: [embed], components: [row]})
+       var filter = (button) => button.user.id === message.author.id;
+       const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
+
+       let channels = message.guild.channels.cache.filter(ch => ch.parentId == server.RegisterParent)
+
+  collector.on("collect", async (button) => {
+      if(button.customId === "ChannelLocking") {
       
-} 
-  }
-  if (args[1] == "kilit") { 
-    server.RegisterSystem = false;
-    server.save();
-    channels.forEach(ch => {
-        ch.permissionOverwrites.edit(`${server.UnregisteredRole}`, {
-            SEND_MESSAGES: false,
-            CONNECT: false
-        });
-    });
+        if (message.channel.permissionsFor(message.guild.id).has('SEND_MESSAGES')) {
+        message.channel.permissionOverwrites.edit(message.guild.id, {
+            SEND_MESSAGES: false
+        }).then(async() => {
+            await button.reply("Kanal başarıyla kilitlendi.")
+        })
+      } else {
+        message.channel.permissionOverwrites.edit(message.guild.id, {
+          SEND_MESSAGES: true
+      }).then(async() => {
+          await button.reply("Kanal kilidi açıldı.")
+      })
+      }
+      } else if(button.customId === "RegisterLocking") {
+
+       if(server.RegisterSystem) {
+        server.RegisterSystem = false;
+        server.save();
+            channels.forEach(ch => {
+              ch.permissionOverwrites.edit(`${server.UnregisteredRole}`, {
+                 // SEND_MESSAGES: false,
+                  CONNECT: false
+              });
+          });
+          button.reply("Başarıyla register voice kanalları ve sistemi kilitlendi")
+        } else if(!server.RegisterSystem) {
+            server.RegisterSystem = true;
+            server.save();
+        
+                channels.forEach(ch => {
+                  ch.permissionOverwrites.edit(`${server.UnregisteredRole}`, {
+                     // SEND_MESSAGES: true,
+                      CONNECT: true
+                  });
+              });
+              button.reply("Başarıyla register voice kanalları ve sistemi açıldı")
+            }
+      } else if(button.customId === "CANCEL") {
+        row.components[0].setDisabled(true)
+        row.components[1].setDisabled(true)
+        row.components[2].setDisabled(true)
   
-    this.client.yolla("Teyit kanalları ve teyit sistemi kapatıldı.", message.author, message.channel)  
-}
+        msg.edit({ components: [row] })
+
+        button.reply("İşlem iptal edildi.")
+      }
+  })
+
+  collector.on("end", async (button) => {
+      row.components[0].setDisabled(true)
+      row.components[1].setDisabled(true)
+      row.components[2].setDisabled(true)
+
+      msg.edit({ components: [row] })
+  })
+
+
   }
-
-
-}
-
 
 }
 
