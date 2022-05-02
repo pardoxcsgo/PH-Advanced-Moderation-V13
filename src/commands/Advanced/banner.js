@@ -1,6 +1,4 @@
-
-
-  const Command = require("../../base/Command.js");
+const Command = require("../../base/Command.js");
 const Discord = require("discord.js")
 const axios = require('axios')
 class banner extends Command {
@@ -19,7 +17,8 @@ if (!user)
   const can = await this.client.api.users(user.id).get();
 
   if(can.banner) {
-     message.channel.send(`https://cdn.discordapp.com/banners/${can.id}/${can.banner}?size=512`)
+    if(can.banner.startsWith('a_')) return message.channel.send(`https://cdn.discordapp.com/banners/${can.id}/${can.banner}.gif?size=512`)
+    else return message.channel.send(`https://cdn.discordapp.com/banners/${can.id}/${can.banner}.png?size=512`)
   }
   else this.client.yolla("Belirttiğiniz kullanıcının banneri bulunmamaktadır!", message.author, message.channel);
 
