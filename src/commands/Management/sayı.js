@@ -45,7 +45,7 @@ class Sayı extends Command {
             let includesOne = 1
             const throwns = `${this.client.users.cache.filter(x => x.tag.toLowerCase().includes(includes.toLowerCase())).map(x => `**${includesOne++}.** <@${x.id}> - (\`${x.id}\`)`).join("\n")}`
              button.reply(`Kullanıcı adında \`${includes}\` geçen kullanıcılar alt tarafta gösteriliyor.\n─────────────────\n ${throwns}`)
-        } if (button.customId === "CANCEL") {
+        } else if (button.customId === "CANCEL") {
             row.components[0].setDisabled(true) 
             row.components[1].setDisabled(true) 
             msg.edit({ components: [row] }); 
