@@ -37,9 +37,11 @@ const row = new Discord.MessageActionRow()
  
    .setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL({ dynamic: true })})
    .setColor("RANDOM")
+   .setTitle(`Bu komut teyit modları arasında geçiş yapmanızı sağlar. Teyit modları:`)
    .setDescription(`
-Teyit modunu değiştirmek için aşağıdaki buttonlardan teyit modları arasından seçim yapın.
-Şuanki teyit modu ${server.GenderRegister ? ".e @Zade Can 22" :  ".isim @Zade Can 22 - Buttonlu Teyit. "}`)
+**1- Butonlu teyit (.isim @Zade Can 22 - Button seçim)**
+**2- Normal teyit (.e @Zade Can 22)**
+\`\`\`Şuanki teyit modu: ${server.GenderRegister ? "Normal teyit." :  "Butonlu teyit."}\`\`\``)
  
 
 let msg = await message.channel.send({ embeds: [embed], components: [row] })
@@ -65,7 +67,7 @@ const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
         server.GenderRegister = false;
         server.save();
 
-        button.reply("Teyit modu buttonlu olarak değiştirildi. Artık \`.isim @Zade Can 22 - Button\` ile kayıt yapılabilecek")
+        button.reply("Teyit modu buttonlu olarak değiştirildi. Artık \`.isim @Zade Can 22 - Button seçim\` ile kayıt yapılabilecek")
 
       } else if(button.customId === "CANCEL") {
         row.components[0].setDisabled(true)
