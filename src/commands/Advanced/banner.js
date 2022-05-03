@@ -14,14 +14,42 @@ class banner extends Command {
 if (!user) 
   try { user = await this.client.users.fetch(args[0]); }
   catch (err) { user = message.author; } 
-  const can = await this.client.api.users(user.id).get();
+   
+  const row = new Discord.MessageActionRow()
+  .addComponents(
+      new Discord.MessageSelectMenu()
+          .setCustomId('avatar')
+          .setPlaceholder('Avatarını görüntülemek için tıkla!')
+          .addOptions([
+              {
+                  label: 'Avatar',
+                  description: 'Kullanıcının avatarını görüntülersiniz.',
+                  value: 'avatar',
+              },
+          ]),
+  );
 
-  if(can.banner) {
-    if(can.banner.startsWith('a_')) return message.channel.send(`https://cdn.discordapp.com/banners/${can.id}/${can.banner}.gif?size=512`)
-    else return message.channel.send(`https://cdn.discordapp.com/banners/${can.id}/${can.banner}.png?size=512`)
+  async function bannerURL(user, client) {
+    const response = await axios.get(`https://discord.com/api/v9/users/${user}`, { headers: { 'Authorization': `Bot ${client.token}` } });
+    if(!response.data.banner) return "Kullanıcının banneri bulunmamakta!"
+    if(response.data.banner.startsWith('a_')) return `https://cdn.discordapp.com/banners/${response.data.id}/${response.data.banner}.gif?size=512`
+    else return(`https://cdn.discordapp.com/banners/${response.data.id}/${response.data.banner}.png?size=512`)
+  
   }
-  else this.client.yolla("Belirttiğiniz kullanıcının banneri bulunmamaktadır!", message.author, message.channel);
 
+
+  let bannerurl = await bannerURL(user.id,this.client)
+
+  let msg = await message.channel.send({ content: `${bannerurl}`, components: [row] })
+  var filter = (menu) => menu.user.id === message.author.id;
+  const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
+ 
+  collector.on("collect", async (menu) => {
+     if(menu.values[0] === "avatar") {
+        menu.reply(`${user.displayAvatarURL({ dynamic: true, size: 4096 })}`)
+    } 
+
+  })
 }
 }
 
