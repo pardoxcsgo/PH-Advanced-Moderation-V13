@@ -2,7 +2,12 @@
 
 Botu sıfırdan kodlamadım önceki v12 olarak paylaştığım bot hatalarla doluydu ve çok fazla ID girmek amelelik olduğu için canımı sıkıyordu. Botu v13 geçirip ayarlamalı bir hale soktum eskisinden kat kat daha iyi hale geldiğini düşünüyorum. Dediğim gibi v12 botu v13 geçirdiğim için görmediğim hatalar illaki olacaktır. Hataları bana discord hesabım üzerinden bildirirseniz daha hızlı bir şekilde hataları çözüp projeyi güncelleyebilirim. canzade#1000
 
+![image](https://user-images.githubusercontent.com/77938499/166584620-69e7fb57-1471-45e2-a65e-83374b48229b.png)
+![image](https://user-images.githubusercontent.com/77938499/166585371-d841c5d3-1c20-4096-8a36-00f558b709c2.png)
+![image](https://user-images.githubusercontent.com/77938499/166585406-73fd61af-fe56-47bf-a383-fda2995e19fd.png)
 ![image](https://user-images.githubusercontent.com/77938499/166144042-50b42300-3148-4f9a-bddb-9605b2eb3637.png)
+![image](https://user-images.githubusercontent.com/77938499/166585461-733b79c6-040d-48ed-99cf-bf54fbc864f6.png)
+
 ![image](https://user-images.githubusercontent.com/77938499/162772087-b887b9b6-237f-46fc-9f2b-5f2ea21dec69.png)
 ![image](https://user-images.githubusercontent.com/77938499/162772167-b61edd1d-5fa0-45b7-9dfd-0065b32398df.png)
 ![image](https://user-images.githubusercontent.com/77938499/162772210-efbdce90-ad82-4758-9c85-1529d6313971.png)
