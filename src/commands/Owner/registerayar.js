@@ -20,12 +20,12 @@ class TeyitAyar extends Command {
 const row = new Discord.MessageActionRow()
 .addComponents(
   new Discord.MessageButton()
-    .setCustomId('GenderRegister')
-    .setLabel("Cinsiyet Teyit")
-    .setStyle('PRIMARY'),
-    new Discord.MessageButton()
     .setCustomId('ButtonRegister')
     .setLabel("Button Teyit")
+    .setStyle('PRIMARY'),
+  new Discord.MessageButton()
+    .setCustomId('GenderRegister')
+    .setLabel("Normal Teyit")
     .setStyle('PRIMARY'),
     new Discord.MessageButton()
     .setCustomId('CANCEL')
@@ -81,7 +81,7 @@ const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
       }
     })
 
-    collector.on("end", async (button) => {
+    collector.on("end", async (button, reason) => {
 
       row.components[0].setDisabled(true)
       row.components[1].setDisabled(true)
