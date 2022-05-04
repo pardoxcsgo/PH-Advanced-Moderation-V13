@@ -26,7 +26,7 @@ class Uyarılar extends Command {
         let user = message.mentions.members.first() || await this.client.üye(args[0], message.guild)
         if (!user) return this.client.yolla("Uyarılarına bakmak istediğin kullanıcyı belirtmelisin", message.author, message.channel)
         uyarılar.findOne({user: user.id}, async(err,res) => {
-            if(!res) return this.client.yolla("Belirttiğin kullanıcının uyarısı bulunmuyor.")
+            if(!res) return this.client.yolla("Belirttiğin kullanıcının uyarısı bulunmuyor.", message.author, message.channel)
             let num = 1
             let uyarılarMap = res.uyarılar.map(x => `- ${num++}. numaralı uyarı ${this.client.users.cache.get(x.mod).tag} tarafından ${moment(x.tarih).format("LLL")} tarihinde "${x.sebep}" sebebiyle verilmiş.\n`).join("\n")
             const embed = new MessageEmbed()
