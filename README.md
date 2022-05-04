@@ -3,7 +3,7 @@
 # Bota dair görseller.
 
 ![image](https://user-images.githubusercontent.com/77938499/166584620-69e7fb57-1471-45e2-a65e-83374b48229b.png)
-![image](https://user-images.githubusercontent.com/77938499/166585872-20651ca7-2a4b-43b3-974d-c297e76aab7c.png)
+![image](https://user-images.githubusercontent.com/77938499/166682695-71738b09-d80c-4aaa-a20d-3e006a6f89ae.png)
 ![image](https://user-images.githubusercontent.com/77938499/166585406-73fd61af-fe56-47bf-a383-fda2995e19fd.png)
 ![image](https://user-images.githubusercontent.com/77938499/166144042-50b42300-3148-4f9a-bddb-9605b2eb3637.png)
 ![image](https://user-images.githubusercontent.com/77938499/166585461-733b79c6-040d-48ed-99cf-bf54fbc864f6.png)
