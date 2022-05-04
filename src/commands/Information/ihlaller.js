@@ -23,7 +23,6 @@ class Cezalar extends Command {
         let user = message.mentions.members.first() || await this.client.üye(args[0], message.guild)
         if (!user) return this.client.yolla("Ceza bilgilerine bakmak istediğin kullanıcyı belirtmelisin", message.author, message.channel)
         await data.find({ user: user.id }).sort({ ihlal: "descending" }).exec(async (err, res) => {
-            if(!res) return this.client.yolla(`${user} kullanıcısının ceza bilgisi bulunmuyor.`, message.author, message.channel)
             let datax = [
                 ["ID", "Tarih", "Ceza", "Sebep"]
             ];
