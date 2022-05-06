@@ -16,7 +16,7 @@ class KullanıcıPanel extends Command {
       guildID: message.guild.id
   });
   if(!server.BotOwner.includes(message.author.id)) return
-
+// güncellediğim kodları alıp botunu düzenliyorsan bu kodun çalışması icin main dosyasini kopyalamalisin
 const row = new Discord.MessageActionRow()
 .addComponents(
   new Discord.MessageButton()
