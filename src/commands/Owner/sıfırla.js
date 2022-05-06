@@ -23,6 +23,7 @@ class Sıfırla extends Command {
   });
     if(!server.BotOwner.includes(message.author.id)) return
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+    if (!member) return this.client.yolla("Bir kullanıcı belirtmelisin.", message.author, message.channel)
 
     const row = new Discord.MessageActionRow()
     .addComponents(
