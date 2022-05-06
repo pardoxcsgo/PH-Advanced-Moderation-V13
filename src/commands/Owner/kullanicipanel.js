@@ -64,7 +64,6 @@ const row = new Discord.MessageActionRow()
 
     message.channel.send({ content: `
 Aşağıdaki menüden kendinize bir işlem seçip sunucu içi depolanan verilerinizi sorgulayabilirsiniz. Verileriniz sadece sizin görebileceğiniz şekilde gönderilir.
-
 • 1: Sunucuya giriş tarihinizi öğrenin.
 • 2: Kayıt olmuş olduğunuz isimleri öğrenin.
 • 3: Devam eden cezanız (varsa) hakkında bilgi alın.
