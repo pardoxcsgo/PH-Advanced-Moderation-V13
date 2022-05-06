@@ -2,7 +2,7 @@ const Command = require("../../base/Command.js");
 const Discord = require("discord.js")
 const kayıtlar = require("../../models/kayıtlar.js")
 let serverSettings = require("../../models/serverSettings");
-class TeyitAyar extends Command {
+class KullanıcıPanel extends Command {
   constructor(client) {
       super(client, {
           name: "kullanıcıpanel",
@@ -64,6 +64,7 @@ const row = new Discord.MessageActionRow()
 
     message.channel.send({ content: `
 Aşağıdaki menüden kendinize bir işlem seçip sunucu içi depolanan verilerinizi sorgulayabilirsiniz. Verileriniz sadece sizin görebileceğiniz şekilde gönderilir.
+
 • 1: Sunucuya giriş tarihinizi öğrenin.
 • 2: Kayıt olmuş olduğunuz isimleri öğrenin.
 • 3: Devam eden cezanız (varsa) hakkında bilgi alın.
@@ -85,4 +86,4 @@ Aşağıdaki menüden kendinize bir işlem seçip sunucu içi depolanan verileri
 }
 
 
-module.exports = TeyitAyar;
+module.exports = KullanıcıPanel;
