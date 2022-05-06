@@ -106,6 +106,7 @@ Bu işlemi sadece bot sahipleri gerçekleştirebilir.
         row.components[1].setDisabled(true);
         row.components[2].setDisabled(true);
         row.components[3].setDisabled(true);
+        row.components[4].setDisabled(true);
         msg.edit({ components: [row] }); 
      })
 
