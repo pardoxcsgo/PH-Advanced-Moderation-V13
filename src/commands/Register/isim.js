@@ -337,7 +337,7 @@ const row = new Discord.MessageActionRow()
             setTimeout(() => {
               member.roles.add(server.WomanRole)
             }, 2000)
-            member.roles.remove(server.WomanRole)
+            member.roles.remove(server.UnregisteredRole)
            const embed = new Discord.MessageEmbed()
            .setAuthor({ name: member.user.tag, iconURL: member.user.avatarURL({ dynamic: true })})
            .setColor("RANDOM")
