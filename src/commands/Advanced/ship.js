@@ -35,8 +35,8 @@ class Ship extends Command {
         const messageAuthor = await Canvas.loadImage(message.author.displayAvatarURL({ format: "png" }))
         ctx.drawImage(messageAuthor, 100, 25, 200, 200)
 
-        const heart = await Canvas.loadImage("https://cdn.discordapp.com/attachments/731112308134248469/949233592591089664/strgkalp.png")
-        const broken = await Canvas.loadImage("https://cdn.discordapp.com/attachments/731112308134248469/949233461993033758/strigakirikkalp.png")
+        const heart = await Canvas.loadImage("https://cdn.discordapp.com/attachments/927571230134009856/975157787002826762/zadekalp.png")
+        const broken = await Canvas.loadImage("https://cdn.discordapp.com/attachments/927571230134009856/975157787678093342/zadekirikkalp.png")
         const think = await Canvas.loadImage("https://cdn.discordapp.com/attachments/731112308134248469/949237394736037938/thnk.png")
 
         if(message.member.roles.cache.has(server.ManRole[0])) {
