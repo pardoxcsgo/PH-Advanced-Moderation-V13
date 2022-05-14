@@ -2,6 +2,7 @@
 
 # Bota dair görseller.
 
+![image](https://user-images.githubusercontent.com/77938499/168444637-56ce9962-00c1-4107-b936-83e02936ec68.png)
 ![image](https://user-images.githubusercontent.com/77938499/166584620-69e7fb57-1471-45e2-a65e-83374b48229b.png)
 ![image](https://user-images.githubusercontent.com/77938499/166682695-71738b09-d80c-4aaa-a20d-3e006a6f89ae.png)
 ![image](https://user-images.githubusercontent.com/77938499/167198045-f12f7af9-ad1b-4834-936b-baffdcddcb0d.png)
@@ -9,6 +10,7 @@
 ![image](https://user-images.githubusercontent.com/77938499/166585406-73fd61af-fe56-47bf-a383-fda2995e19fd.png)
 ![image](https://user-images.githubusercontent.com/77938499/167198861-334ad180-461d-4214-99ac-95294ed577b3.png)
 ![image](https://user-images.githubusercontent.com/77938499/167304319-dd5a7096-b062-4d1e-a654-a5281a68cfd0.png)
+![image](https://user-images.githubusercontent.com/77938499/168444614-488f7ca6-8033-48dd-a047-f6bc252deb34.png)
 ![image](https://user-images.githubusercontent.com/77938499/166585461-733b79c6-040d-48ed-99cf-bf54fbc864f6.png)
 ![image](https://user-images.githubusercontent.com/77938499/166585992-064ccbcb-79fc-4617-935c-e83af1e19f76.png)
 ![image](https://user-images.githubusercontent.com/77938499/166586009-3367d3f4-4b39-4281-b143-7453f03cb563.png)
