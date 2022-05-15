@@ -36,10 +36,11 @@ class Git extends Command {
        
         let teklif = new Discord.MessageEmbed()
         .setAuthor({ name: message.author.tag, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
-        .setDescription(`${message.author} adlı kullanıcı sizin sesli kanalınıza gelmek istiyor kabul ediyor musunuz?`)
+        .setDescription(`
+${kullanici}, ${message.author} adlı kullanıcı sizin sesli kanalınıza gelmek istiyor kabul ediyor musunuz?`)
         .setColor("RANDOM")
     
-          let msg = await message.channel.send({ embeds: [teklif], components: [row] })
+          let msg = await message.channel.send({ content: `${kullanici}` embeds: [teklif], components: [row] })
 
         var filter = (button) => button.user.id === kullanici.id;
         const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
