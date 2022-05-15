@@ -52,7 +52,7 @@ class Move extends Command {
 ${user}, ${message.member} üyesi sizi ${message.member.voice.channel.name} adlı kanala çekmek istiyor kabul ediyor musun?
         `)
       
-        let msg = await message.channel.send({ embeds: [embed], components: [row] })
+        let msg = await message.channel.send({ content: `${user}`, embeds: [embed], components: [row] })
 
         var filter = (button) => button.user.id === user.id;
         const collector = msg.createMessageComponentCollector({ filter, time: 30000 })
