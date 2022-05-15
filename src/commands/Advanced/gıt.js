@@ -22,11 +22,11 @@ class Git extends Command {
         .addComponents(
             new Discord.MessageButton()
             .setCustomId("GİT")
-            .setLabel("GİT")
+            .setLabel("GELSİN")
             .setStyle("SUCCESS"),
             new Discord.MessageButton()
             .setCustomId("GİTME")
-            .setLabel("GİTME")
+            .setLabel("GELMESİN")
             .setStyle("PRIMARY"),
             new Discord.MessageButton()
             .setCustomId("İPTAL")
