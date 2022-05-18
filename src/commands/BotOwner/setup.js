@@ -83,6 +83,7 @@ class Setup extends Command {
 !kur chatmuteauth <@ChatMuteAuth>
 !kur rolemanageauth <@RolManageAuth>
 !kur voicemuteauth <@VoiceMuteAuth>
+!kur managementroles <@ManagementRoles>
 `)//9
             .setColor('00b5ff')
             message.channel.send({ embeds: [komutlarEmbed] })
@@ -116,6 +117,8 @@ class Setup extends Command {
 **VoiceMuteAuth:** (${ayar.VoiceMuteAuth.length > 0 ? `${ayar.VoiceMuteAuth.map(x => `<@&${x}>`).join(",")}` : "\`YOK\`"})
 **RoleManageAuth:** (${ayar.RoleManageAuth.length > 0 ? `${ayar.RoleManageAuth.map(x => `<@&${x}>`).join(",")}` : "\`YOK\`"})
 **MoveAuth:** (${ayar.MoveAuth.length > 0 ? `${ayar.MoveAuth.map(x => `<@&${x}>`).join(",")}` : "\`YOK\`"})
+**ManagementRoles:** (${ayar.ManagementRoles.length > 0 ? `${ayar.ManagementRoles.map(x => `<@&${x}>`).join(",")}` : "\`YOK\`"})
+
 `)
 .addField(`
 \`\`\`ROLE SETTINGS\`\`\``, `
@@ -333,6 +336,18 @@ if(["moveauth"].some(x => x === choose)) {
     }
     canzade.MoveAuth = rol, await canzade.save() 
     this.client.yolla(`Sunucu transport yetkilisi başarıyla ${rol.map(x => `<@&${x}>`)} olarak ayarlandı`, message.author, message.channel)
+}
+
+if(["managementroles"].some(x => x === choose)) {
+    let rol;
+    if (message.mentions.roles.size >= 1) {
+        rol = message.mentions.roles.map(r => r.id);
+    } else {
+        if (!rol) return this.client.yolla(`Sunucu yönetim rollerini belirtmelisin`, message.author, message.channel)
+        rol = args.splice(0, 1).map(id => message.guild.roles.cache.get(id)).filter(r => r != undefined);
+    }
+    canzade.ManagementRoles = rol, await canzade.save() 
+    this.client.yolla(`Sunucu yönetim rolleri başarıyla ${rol.map(x => `<@&${x}>`)} olarak ayarlandı`, message.author, message.channel)
 }
 
 
