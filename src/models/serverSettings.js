@@ -109,6 +109,10 @@ MoveAuth: {
     default: []
 },
 
+ManagementRoles: {
+    type: Array,
+    default: []
+},
 
 // ROLE
 
