@@ -5,6 +5,7 @@ const klaw = require("klaw");
 const path = require("path");
 const mongoose = require("mongoose")
 const Discord = require("discord.js")
+const CronJob = require("cron").CronJob;
 const cezalar = require("./src/models/cezalar.js")
 let serverSettings = require("./src/models/serverSettings");
 const taglar = require("./src/models/yasaklıtag.js");
@@ -391,6 +392,26 @@ const init = async () => {
   mongoose.connect(client.config.mongoose, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(client.logger.log("Mongo Bağlantısı Kuruldu ✔", "log"));
 };
+
+client.on("ready", async() => {
+
+    const Task = new CronJob(
+        "00 00 00 * * *",
+        async () => {
+        
+            const channel = await client.channels.fetch(server.GeneralChat);
+
+            channel.send("Saat 00:00 Güzel Dilek Tutmayı Unutmayın... @here")
+        },
+        null,
+        true,
+        "Europe/Istanbul",
+    );
+
+    Task.start();
+
+
+})
 
 client.on("ready", () => {
   taglar.findOne({guild: client.config.guildID}, async (err,res) => { 
